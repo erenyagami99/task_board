@@ -1,5 +1,7 @@
 # TaskBoard Project 
 
+* Firstly run the command `npm install` for both front-end and back-end directories.
+
 * This folder contains both server and client side code which can be started locally with command `npm start`.
 
 * `npm start` command should be run by navigating in to the respective folders seperately.

@@ -20,7 +20,7 @@
         cdkDropList
         #todoList="cdkDropList"
         [cdkDropListData]="todoTasks"
-        [cdkDropListConnectedTo]="[progressList]"
+        [cdkDropListConnectedTo]="[progressList, completedList]"
         (cdkDropListDropped)="onItemDrop($event)"
       >
         <div
@@ -53,7 +53,7 @@
         cdkDropList
         #progressList="cdkDropList"
         [cdkDropListData]="progressTasks"
-        [cdkDropListConnectedTo]="[completedList]"
+        [cdkDropListConnectedTo]="[todoList, completedList]"
         (cdkDropListDropped)="onItemDrop($event)"
       >
         <div
@@ -86,7 +86,7 @@
         cdkDropList
         #completedList="cdkDropList"
         [cdkDropListData]="completedTasks"
-        [cdkDropListConnectedTo]="[todoList]"
+        [cdkDropListConnectedTo]="[todoList, progressList]"
         (cdkDropListDropped)="onItemDrop($event)"
       >
         <div

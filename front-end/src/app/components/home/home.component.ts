@@ -141,18 +141,20 @@ export class HomeComponent implements OnInit {
         event.previousIndex,
         event.currentIndex
       );
-      this.taskStageUpdate(lastMovedTask);
+
+      const currentStage = event.container.id;
+
+      this.taskStageUpdate(lastMovedTask, currentStage);
     }
   }
-  taskStageUpdate(updatedTask: any) {
-    console.log(updatedTask, 'srinviasi');
+  taskStageUpdate(updatedTask: any, stage: any) {
     let taskStage = '';
-    if (updatedTask.stage === 'to-do') {
-      taskStage = 'progress';
-    } else if (updatedTask.stage === 'progress') {
-      taskStage = 'done';
-    } else {
+    if (stage === 'cdk-drop-list-0') {
       taskStage = 'to-do';
+    } else if (stage === 'cdk-drop-list-1') {
+      taskStage = 'progress';
+    } else {
+      taskStage = 'done';
     }
     let toUpdateTask = {
       name: updatedTask.name,
