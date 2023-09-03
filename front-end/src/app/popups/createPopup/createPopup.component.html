@@ -1,0 +1,68 @@
+<!-- popup.component.html -->
+<div class="popup-container">
+  <div class="popup-content">
+    <div class="header-div">
+      <h2>Create Task</h2>
+      <p (click)="closePopup()">X</p>
+    </div>
+    <form [formGroup]="form" (submit)="submit()">
+      <div class="input-div">
+        <label for="name">Name</label>
+        <input
+          formControlName="name"
+          type="text"
+          id="name"
+          name="name"
+          placeholder="Enter Name"
+          required
+        />
+      </div>
+      <div class="input-div">
+        <label for="description">Description</label>
+        <input
+          formControlName="description"
+          type="text"
+          id="description"
+          name="description"
+          placeholder="Enter Description"
+          required
+        />
+      </div>
+
+      <div class="input-div">
+        <label for="duedate">Due Date</label>
+        <mat-form-field>
+          <mat-label>Choose Due Date</mat-label>
+          <input
+            matInput
+            id="duedate"
+            formControlName="dueDate"
+            name="duedate"
+            [matDatepicker]="picker"
+            (dateChange)="onDateChange($event)"
+          />
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="input-div">
+        <label for="stage">stage</label>
+        <select
+          id="state"
+          formControlName="stage"
+          name="stage"
+          [(ngModel)]="selectedOption"
+        >
+          <option value="to-do">To Do</option>
+          <option value="progress">Progress</option>
+          <option value="done">Completed</option>
+        </select>
+      </div>
+
+      <button type="submit">Create</button>
+    </form>
+  </div>
+</div>

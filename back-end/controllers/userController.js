@@ -34,29 +34,63 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
-const loginUser = asyncHandler(async (req, res) => {});
+const loginUser = asyncHandler(async (req, res) => {
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) {
+    return res.status(404).send({
+      message: "User not Found",
+    });
+  }
+
+  if (!(await bcrypt.compare(req.body.password, user.password))) {
+    return res.status(400).send({
+      message: "Password is Incorrect",
+    });
+  }
+
+  const token = jwt.sign({ _id: user._id }, process.env.SECRET_KEY);
+
+  res.status(200).json({ user, token });
+  console.log(user, "user");
+});
 
 const currentUser = asyncHandler(async (req, res) => {
   try {
-    const cookie = req.cookies["jwt"];
-    const claims = jwt.verify(cookie, process.env.SECRET_KEY);
+    const token = req.headers.authorization;
 
-    if (!claims) {
-      return res.status(401).send({
-        message: "unathenticated",
+    if (!token) {
+      return res.status(401).json({
+        message: "Unauthorized",
       });
     }
 
-    const user = await User.findOne({ _id: claims._id });
+    const decodedToken = jwt.verify(
+      token.split(" ")[1],
+      process.env.SECRET_KEY
+    );
+
+    if (!decodedToken) {
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
+    }
+
+    const user = await User.findOne({ _id: decodedToken._id });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
 
     const { password, ...data } = await user.toJSON();
 
-    res.send(data);
+    res.status(200).json(data);
   } catch (err) {
-    return res.status(401).send({
-      message: "unauthenticated",
+    return res.status(401).json({
+      message: "Unauthorized",
     });
   }
 });
 
-module.exports = { registerUser, currentUser };
+module.exports = { registerUser, currentUser, loginUser };

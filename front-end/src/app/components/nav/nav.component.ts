@@ -24,6 +24,7 @@ export class NavComponent implements OnInit {
 
   logout(): void{
     this.store.dispatch(AuthActions.clearJwt());
+    localStorage.clear();
     this.authenticated=false
   }
 }

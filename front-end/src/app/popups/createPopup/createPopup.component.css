@@ -1,0 +1,79 @@
+/* popup.component.css */
+.popup-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.popup-content {
+  background-color: #fff; /* White background for the popup */
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Box shadow for a raised effect */
+  max-width: 600px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.popup-content h2 {
+  margin-top: 0;
+}
+.input-div {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+form {
+  display: flex;
+  height: 400px;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 400px;
+}
+
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.header-div {
+  width: 90%;
+  justify-content: space-between;
+  display: flex;
+}
+.header-div p {
+  cursor: pointer;
+}
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .popup-content {
+    max-width: 90%;
+  }
+}
