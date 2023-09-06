@@ -25,7 +25,6 @@ export class UpdatePopupComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.taskToUpdate, 'sirn');
     this.taskName = this.taskToUpdate.name;
     this.taskDescription = this.taskToUpdate.description;
     this.selectedOption = this.taskToUpdate.stage;
