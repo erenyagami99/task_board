@@ -79,6 +79,7 @@ export class HomeComponent implements OnInit {
 
         (err) => {
           this.message = 'You are not logged in';
+          console.log(err);
           Emitters.authEmitter.emit(false);
         }
       );
@@ -89,7 +90,6 @@ export class HomeComponent implements OnInit {
 
     this.http.get(apiUrl).subscribe(
       (response: any) => {
-        // Handle the API response here
         this.tasks = response;
 
         for (let i = 0; i < this.tasks.length; i++) {
@@ -105,7 +105,6 @@ export class HomeComponent implements OnInit {
         console.log('Tasks:', response);
       },
       (error) => {
-        // Handle any errors here
         console.error('Error:', error);
       }
     );
@@ -128,7 +127,6 @@ export class HomeComponent implements OnInit {
   onItemDrop(event: CdkDragDrop<Task[]>): void {
     const lastMovedTask: Task = event.item.data;
     if (event.previousContainer === event.container) {
-      // Item moved within the same column
       moveItemInArray(
         event.container.data,
         event.previousIndex,

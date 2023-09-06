@@ -1,6 +1,5 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../model/user");
-const { MongoServerError } = require("mongodb");
 
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
