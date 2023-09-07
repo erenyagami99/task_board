@@ -33,6 +33,10 @@ export class HomeComponent implements OnInit {
   taskId: any;
   stage: any;
   stages: any;
+  deleteStage: any;
+  deleteTask: any;
+  isTask: any;
+  stageId: any;
   backgroundColors = ['#1C5A7C', '#106354', '#54117D', '#71441B'];
 
   constructor(
@@ -55,7 +59,7 @@ export class HomeComponent implements OnInit {
 
     setTimeout(() => {
       this.getUserTasks(this.userId);
-    }, 500);
+    }, 1000);
   }
 
   getUser(jwt: string): void {
@@ -90,7 +94,7 @@ export class HomeComponent implements OnInit {
     this.http.get(apiUrl).subscribe(
       (response: any) => {
         this.stages = response;
-        console.log('Tasks:', response);
+        console.log('Stages:', response);
       },
       (error) => {
         console.error('Error:', error);
@@ -98,13 +102,18 @@ export class HomeComponent implements OnInit {
     );
   }
 
-  openPopup1(stage: any = {}) {
+  openPopup1(stage: any = {}, boolean: any, stageId: any = '') {
     this.stage = stage;
+    this.isTask = boolean;
+    this.stageId = stageId;
     this.popupService.openCreatePopup();
   }
 
-  openPopup2(stage: any) {
+  openPopup2(stage: any, boolean: any, task: any, taskId: any = '') {
     this.stage = stage;
+    this.deleteStage = boolean;
+    this.deleteTask = task;
+    this.taskId = taskId;
     this.popupService.openUpdatePopup();
   }
 

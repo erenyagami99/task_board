@@ -1,8 +1,8 @@
 <!-- popup.component.html -->
 <div class="popup-container">
-  <div class="popup-content">
+  <div *ngIf="!deleteStage && !deleteTask" class="popup-content">
     <div class="header-div">
-      <h2>Update Stage Name</h2>
+      <h2>Change Stage Name</h2>
       <img
         (click)="closePopup()"
         class="close-icon"
@@ -21,5 +21,22 @@
       />
     </div>
     <button (click)="submit()">Update</button>
+  </div>
+  <div *ngIf="deleteStage || deleteTask" class="popup-content">
+    <div *ngIf="deleteStage" class="header-div">
+      <h2 style="margin-left: auto; margin-right: auto">
+        Are you sure you want to this Stage?
+      </h2>
+    </div>
+    <div *ngIf="deleteTask" class="header-div">
+      <h2 style="margin-left: auto; margin-right: auto">
+        Are you sure you want to this Task?
+      </h2>
+    </div>
+    <div class="button-container">
+      <button *ngIf="deleteStage" (click)="deleteCurrentStage()">Yes</button>
+      <button *ngIf="deleteTask" (click)="deleteCurrentTask()">Yes Now</button>
+      <button (click)="closePopup()">No</button>
+    </div>
   </div>
 </div>

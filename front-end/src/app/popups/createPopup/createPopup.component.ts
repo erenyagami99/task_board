@@ -15,6 +15,8 @@ export class CreatePopupComponent implements OnInit {
 
   @Input() userId: string;
   @Input() stage: any;
+  @Input() isTask: any;
+  @Input() stageId: any;
   form: FormGroup;
   selectedApplication = 'Web';
   applicationOptions = ['Web', 'IOS', 'Desktop', 'Mobile'];
@@ -30,14 +32,21 @@ export class CreatePopupComponent implements OnInit {
 
   ngOnInit(): void {
     const initialDate = new Date();
-
     this.onDateChange({ value: initialDate });
+
+    console.log(this.stage, 'Srinivas');
 
     this.form = this.formBuilder.group({
       stageName: '',
-      tasks: this.formBuilder.array([this.createTask()]),
+      tasks: this.formBuilder.array([]),
       userId: this.userId,
     });
+
+    if (this.isTask && this.stage) {
+      this.prefillTask(this.stage);
+    } else {
+      this.addEmptyTask();
+    }
   }
 
   createTask(): FormGroup {
@@ -49,6 +58,27 @@ export class CreatePopupComponent implements OnInit {
       links: [],
       assignee: '',
     });
+  }
+
+  prefillTask(taskDetails: any) {
+    const taskFormArray = this.form.get('tasks') as FormArray;
+    const taskFormGroup = this.createTask();
+    taskFormGroup.patchValue({
+      name: taskDetails.name,
+      description: taskDetails.description,
+      dueDate: taskDetails.dueDate,
+      application: taskDetails.application,
+      links: taskDetails.links,
+      assignee: taskDetails.assignee,
+    });
+    this.applications = this.stage.application;
+    this.links = this.stage.links;
+    taskFormArray.push(taskFormGroup);
+  }
+
+  addEmptyTask() {
+    const tasksFormArray = this.form.get('tasks') as FormArray;
+    tasksFormArray.push(this.createTask());
   }
 
   addTask(): void {
@@ -124,21 +154,52 @@ export class CreatePopupComponent implements OnInit {
     let updateStage = this.form.getRawValue();
     let stage = this.stage;
     stage.tasks = stage.tasks.concat(updateStage.tasks);
-    stage.tasks[1].dueDate = this.selectedDate;
-    stage.tasks[1].application = this.applications;
-    stage.tasks[1].links = this.links;
+    stage.tasks[stage.tasks.length - 1].dueDate = this.selectedDate;
+    stage.tasks[stage.tasks.length - 1].application = this.applications;
+    stage.tasks[stage.tasks.length - 1].links = this.links;
     if (
-      stage.tasks[1].name === '' ||
-      stage.tasks[1].description === '' ||
-      stage.tasks[1].dueDate === ''
+      stage.tasks[stage.tasks.length - 1].name === '' ||
+      stage.tasks[stage.tasks.length - 1].description === '' ||
+      stage.tasks[stage.tasks.length - 1].dueDate === ''
     ) {
       Swal.fire('Error', 'Please mention all the fields.', 'error');
     } else {
       this.http
-        .put(`http://localhost:5000/task/${this.stage._id}`, stage)
+        .put(`http://localhost:5000/task/${this.stageId}`, stage)
         .subscribe(
           (response) => {
             this.closePopup();
+            console.log('Task created:', response);
+          },
+          (error) => {
+            console.error('Error:', error);
+          }
+        );
+    }
+  }
+
+  submit3() {
+    let updateStage = this.form.getRawValue();
+    let updatedTask = updateStage.tasks[0];
+    updatedTask.application = this.applications;
+    updatedTask.links = this.links;
+    console.log(updatedTask, 'updated one');
+    if (
+      updatedTask.name === '' ||
+      updatedTask.description === '' ||
+      updatedTask.dueDate === ''
+    ) {
+      Swal.fire('Error', 'Please mention all the fields.', 'error');
+    } else {
+      this.http
+        .put(
+          `http://localhost:5000/task/${this.stageId}/${this.stage._id}`,
+          updatedTask
+        )
+        .subscribe(
+          (response) => {
+            this.closePopup();
+            window.location.reload();
             console.log('Task created:', response);
           },
           (error) => {

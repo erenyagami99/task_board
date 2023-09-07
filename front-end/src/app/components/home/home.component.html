@@ -3,7 +3,11 @@
     <h1>
       {{ message }}
     </h1>
-    <button type="button" class="btn btn-primary btn-lg" (click)="openPopup1()">
+    <button
+      type="button"
+      class="btn btn-primary btn-lg"
+      (click)="openPopup1({}, false)"
+    >
       Create Stage +
     </button>
   </div>
@@ -126,10 +130,13 @@
         <h1>{{ stage.stageName }}</h1>
         <div class="icon-container">
           <img
-            (click)="openPopup2(stage)"
+            (click)="openPopup2(stage, false, false)"
             src="/assets/images/white-edit.png"
           />
-          <img src="/assets/images/white-delete.png" />
+          <img
+            (click)="openPopup2(stage, true, false)"
+            src="/assets/images/white-delete.png"
+          />
         </div>
       </div>
       <div class="task-container">
@@ -168,12 +175,18 @@
               <p>{{ task.assignee }}</p>
             </div>
             <div>
-              <img src="assets/images/update-icon.png" />
-              <img src="assets/images/delete-icon.png" />
+              <img
+                (click)="openPopup1(task, true, stage._id)"
+                src="assets/images/update-icon.png"
+              />
+              <img
+                (click)="openPopup2(stage, false, true, task._id)"
+                src="assets/images/delete-icon.png"
+              />
             </div>
           </div>
         </div>
-        <div class="add-div" (click)="openPopup1(stage)">
+        <div class="add-div" (click)="openPopup1(stage, false, stage._id)">
           <img src="assets/images/add-icon.png" />
         </div>
       </div>
@@ -183,11 +196,16 @@
   <create-popup
     [userId]="userId"
     [stage]="stage"
+    [isTask]="isTask"
+    [stageId]="stageId"
     *ngIf="popupService.isCreatePopupOpen"
   ></create-popup>
   <update-popup
     [userId]="userId"
     [stage]="stage"
+    [deleteStage]="deleteStage"
+    [deleteTask]="deleteTask"
+    [taskId]="taskId"
     *ngIf="popupService.isUpdatePopupOpen"
   ></update-popup>
 

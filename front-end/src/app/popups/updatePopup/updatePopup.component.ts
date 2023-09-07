@@ -12,6 +12,9 @@ import Swal from 'sweetalert2';
 export class UpdatePopupComponent implements OnInit {
   @Input() userId: string;
   @Input() stage: any;
+  @Input() deleteStage: any;
+  @Input() deleteTask: any;
+  @Input() taskId: any;
   form: FormGroup;
   stageName: any;
 
@@ -19,6 +22,7 @@ export class UpdatePopupComponent implements OnInit {
 
   ngOnInit(): void {
     this.stageName = this.stage.stageName;
+    console.log(this.taskId, 'srinivas');
   }
 
   submit(): void {
@@ -40,6 +44,47 @@ export class UpdatePopupComponent implements OnInit {
     }
     console.log(this.stage, 'srinvias');
   }
+
+  deleteCurrentStage(): void {
+    this.http.delete(`http://localhost:5000/task/${this.stage._id}`).subscribe(
+      () => {
+        console.log('Stage deleted successfully');
+        this.closePopup();
+        window.location.reload();
+      },
+      (error) => {
+        if (error.status === 200) {
+          console.log('Stage deleted successfully');
+          this.closePopup();
+          window.location.reload();
+        } else {
+          console.error('Error deleting stage:', error);
+        }
+      }
+    );
+  }
+
+  deleteCurrentTask(): void {
+    this.http
+      .delete(`http://localhost:5000/task/${this.stage._id}/${this.taskId}`)
+      .subscribe(
+        () => {
+          console.log('Task deleted successfully');
+          this.closePopup();
+          window.location.reload();
+        },
+        (error) => {
+          if (error.status === 200) {
+            console.log('Task deleted successfully');
+            this.closePopup();
+            window.location.reload();
+          } else {
+            console.error('Error deleting task:', error);
+          }
+        }
+      );
+  }
+
   closePopup() {
     this.popupService.closeUpdatePopup();
   }

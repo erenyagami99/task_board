@@ -198,6 +198,7 @@
 }
 .assignee-div img {
   width: 20px;
+  cursor: pointer;
 }
 .assignee-div p {
   color: #80878f;

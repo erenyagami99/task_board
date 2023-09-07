@@ -11,7 +11,9 @@
     />
     <form
       [formGroup]="form"
-      (ngSubmit)="isObjectEmpty(stage) ? submit() : submit2()"
+      (ngSubmit)="
+        isTask ? submit3() : isObjectEmpty(stage) ? submit() : submit2()
+      "
     >
       <div *ngIf="isObjectEmpty(stage)" class="input-div">
         <label for="stageName">Stage Name</label>
@@ -137,7 +139,8 @@
           </div>
         </div>
       </div>
-      <button type="submit">Create</button>
+      <button *ngIf="!isTask" type="submit">Create</button>
+      <button *ngIf="isTask" type="submit">Update</button>
     </form>
   </div>
 </div>
