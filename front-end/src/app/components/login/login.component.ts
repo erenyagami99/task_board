@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit {
       Swal.fire('Error', 'Please enter a valid email.', 'error');
     } else {
       this.http
-        .post('http://localhost:5000/login', user, {
+        .post('https://task-board-ddz4.onrender.com/login', user, {
           withCredentials: true,
         })
         .subscribe(

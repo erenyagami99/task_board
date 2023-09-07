@@ -30,7 +30,10 @@ export class UpdatePopupComponent implements OnInit {
       Swal.fire('Error', 'Please mention the required fields.', 'error');
     } else {
       this.http
-        .put(`http://localhost:5000/task/${this.stage._id}`, this.stage)
+        .put(
+          `https://task-board-ddz4.onrender.com/task/${this.stage._id}`,
+          this.stage
+        )
         .subscribe(
           (response) => {
             this.closePopup();
@@ -44,27 +47,31 @@ export class UpdatePopupComponent implements OnInit {
   }
 
   deleteCurrentStage(): void {
-    this.http.delete(`http://localhost:5000/task/${this.stage._id}`).subscribe(
-      () => {
-        console.log('Stage deleted successfully');
-        this.closePopup();
-        window.location.reload();
-      },
-      (error) => {
-        if (error.status === 200) {
+    this.http
+      .delete(`https://task-board-ddz4.onrender.com/task/${this.stage._id}`)
+      .subscribe(
+        () => {
           console.log('Stage deleted successfully');
           this.closePopup();
           window.location.reload();
-        } else {
-          console.error('Error deleting stage:', error);
+        },
+        (error) => {
+          if (error.status === 200) {
+            console.log('Stage deleted successfully');
+            this.closePopup();
+            window.location.reload();
+          } else {
+            console.error('Error deleting stage:', error);
+          }
         }
-      }
-    );
+      );
   }
 
   deleteCurrentTask(): void {
     this.http
-      .delete(`http://localhost:5000/task/${this.stage._id}/${this.taskId}`)
+      .delete(
+        `https://task-board-ddz4.onrender.com/task/${this.stage._id}/${this.taskId}`
+      )
       .subscribe(
         () => {
           console.log('Task deleted successfully');

@@ -67,7 +67,7 @@ export class HomeComponent implements OnInit {
       Authorization: `Bearer ${jwt}`,
     });
     this.http
-      .get('http://localhost:5000/user', {
+      .get('https://task-board-ddz4.onrender.com/user', {
         headers: headers,
         withCredentials: true,
       })
@@ -89,7 +89,7 @@ export class HomeComponent implements OnInit {
   }
 
   getUserTasks(userId: string): void {
-    const apiUrl = `http://localhost:5000/task/${userId}`;
+    const apiUrl = `https://task-board-ddz4.onrender.com/task/${userId}`;
 
     this.http.get(apiUrl).subscribe(
       (response: any) => {
@@ -154,7 +154,7 @@ export class HomeComponent implements OnInit {
       stage: taskStage,
       userId: updatedTask.userId,
     };
-    const url = `http://localhost:5000/task/${updatedTask._id}`;
+    const url = `https://task-board-ddz4.onrender.com/task/${updatedTask._id}`;
     return this.http.put(url, toUpdateTask).subscribe(
       (response) => {
         console.log('Task created:', response);

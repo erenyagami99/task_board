@@ -48,7 +48,7 @@ export class RegisterComponent implements OnInit {
       Swal.fire('Error', 'Please enter a valid email.', 'error');
     } else {
       this.http
-        .post('http://localhost:5000/register', user, {
+        .post('https://task-board-ddz4.onrender.com/register', user, {
           withCredentials: true,
         })
         .subscribe(

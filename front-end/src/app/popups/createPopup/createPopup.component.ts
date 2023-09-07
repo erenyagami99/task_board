@@ -134,16 +134,18 @@ export class CreatePopupComponent implements OnInit {
     ) {
       Swal.fire('Error', 'Please mention all the fields.', 'error');
     } else {
-      this.http.post('http://localhost:5000/task', stage).subscribe(
-        (response) => {
-          this.closePopup();
-          window.location.reload();
-          console.log('Task created:', response);
-        },
-        (error) => {
-          console.error('Error:', error);
-        }
-      );
+      this.http
+        .post('https://task-board-ddz4.onrender.com/task', stage)
+        .subscribe(
+          (response) => {
+            this.closePopup();
+            window.location.reload();
+            console.log('Task created:', response);
+          },
+          (error) => {
+            console.error('Error:', error);
+          }
+        );
     }
   }
 
@@ -162,7 +164,7 @@ export class CreatePopupComponent implements OnInit {
       Swal.fire('Error', 'Please mention all the fields.', 'error');
     } else {
       this.http
-        .put(`http://localhost:5000/task/${this.stageId}`, stage)
+        .put(`https://task-board-ddz4.onrender.com/task/${this.stageId}`, stage)
         .subscribe(
           (response) => {
             this.closePopup();
@@ -189,7 +191,7 @@ export class CreatePopupComponent implements OnInit {
     } else {
       this.http
         .put(
-          `http://localhost:5000/task/${this.stageId}/${this.stage._id}`,
+          `https://task-board-ddz4.onrender.com/task/${this.stageId}/${this.stage._id}`,
           updatedTask
         )
         .subscribe(
