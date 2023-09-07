@@ -20,7 +20,7 @@ app.use(
     credentials: true,
     origin: [
       "http://localhost:4200",
-      "https://task-board-srinivas.netlify.app/",
+      "https://task-board-srinivas.netlify.app",
     ],
   })
 );
