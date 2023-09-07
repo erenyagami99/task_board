@@ -12,115 +12,11 @@
     </button>
   </div>
 
-  <!-- <div class="table">
-    <div class="table-head">
-      <div class="heading"><h1>To Do</h1></div>
-      <div class="heading"><h1>In Progress</h1></div>
-      <div class="heading"><h1>Completed</h1></div>
-    </div>
-    <div class="table-body">
-      <div
-        class="table-column"
-        cdkDropList
-        #todoList="cdkDropList"
-        [cdkDropListData]="todoTasks"
-        [cdkDropListConnectedTo]="[progressList, completedList]"
-        (cdkDropListDropped)="onItemDrop($event)"
-      >
-        <div
-          class="item"
-          *ngFor="let task of todoTasks"
-          cdkDrag
-          [cdkDragData]="task"
-        >
-          <h1>{{ task.name }}</h1>
-          <p>{{ task.description }}</p>
-          <p>Due Date :{{ task.dueDate | date : "dd/MM/yyyy" }}</p>
-          <div class="icon-div">
-            <img
-              (click)="openPopup2(task)"
-              class="icon"
-              src="assets/images/update-icon.png"
-              alt="/"
-            />
-            <img
-              (click)="openPopup3(task._id)"
-              class="icon"
-              src="assets/images/delete-icon.png"
-              alt="/"
-            />
-          </div>
-        </div>
-      </div>
-      <div
-        class="table-column"
-        cdkDropList
-        #progressList="cdkDropList"
-        [cdkDropListData]="progressTasks"
-        [cdkDropListConnectedTo]="[todoList, completedList]"
-        (cdkDropListDropped)="onItemDrop($event)"
-      >
-        <div
-          class="item"
-          *ngFor="let task of progressTasks"
-          cdkDrag
-          [cdkDragData]="task"
-        >
-          <h1>{{ task.name }}</h1>
-          <p>{{ task.description }}</p>
-          <p>Due Date :{{ task.dueDate | date : "dd/MM/yyyy" }}</p>
-          <div class="icon-div">
-            <img
-              (click)="openPopup2(task)"
-              class="icon"
-              src="assets/images/update-icon.png"
-              alt="/"
-            />
-            <img
-              (click)="openPopup3(task._id)"
-              class="icon"
-              src="assets/images/delete-icon.png"
-              alt="/"
-            />
-          </div>
-        </div>
-      </div>
-      <div
-        class="table-column"
-        cdkDropList
-        #completedList="cdkDropList"
-        [cdkDropListData]="completedTasks"
-        [cdkDropListConnectedTo]="[todoList, progressList]"
-        (cdkDropListDropped)="onItemDrop($event)"
-      >
-        <div
-          class="item"
-          *ngFor="let task of completedTasks"
-          cdkDrag
-          [cdkDragData]="task"
-        >
-          <h1>{{ task.name }}</h1>
-          <p>{{ task.description }}</p>
-          <p>Due Date :{{ task.dueDate | date : "dd/MM/yyyy" }}</p>
-          <div class="icon-div">
-            <img
-              (click)="openPopup2(task)"
-              class="icon"
-              src="assets/images/update-icon.png"
-              alt="/"
-            />
-            <img
-              (click)="openPopup3(task._id)"
-              class="icon"
-              src="assets/images/delete-icon.png"
-              alt="/"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> -->
-
+  <div *ngIf="stages.length === 0">
+    <h1 class="warning-text">
+      ** Please create Stage and start implementing tasks
+    </h1>
+  </div>
   <div class="stage-container">
     <div class="stage-div" *ngFor="let stage of stages; let i = index">
       <div
@@ -208,9 +104,4 @@
     [taskId]="taskId"
     *ngIf="popupService.isUpdatePopupOpen"
   ></update-popup>
-
-  <delete-popup
-    [taskId]="taskId"
-    *ngIf="popupService.isDeletePopupOpen"
-  ></delete-popup>
 </div>

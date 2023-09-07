@@ -34,8 +34,6 @@ export class CreatePopupComponent implements OnInit {
     const initialDate = new Date();
     this.onDateChange({ value: initialDate });
 
-    console.log(this.stage, 'Srinivas');
-
     this.form = this.formBuilder.group({
       stageName: '',
       tasks: this.formBuilder.array([]),
@@ -147,7 +145,6 @@ export class CreatePopupComponent implements OnInit {
         }
       );
     }
-    console.log(stage);
   }
 
   submit2(): void {
@@ -183,7 +180,6 @@ export class CreatePopupComponent implements OnInit {
     let updatedTask = updateStage.tasks[0];
     updatedTask.application = this.applications;
     updatedTask.links = this.links;
-    console.log(updatedTask, 'updated one');
     if (
       updatedTask.name === '' ||
       updatedTask.description === '' ||

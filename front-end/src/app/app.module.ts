@@ -18,7 +18,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule, MAT_DATE_FORMATS } from '@angular/material/core';
 import { CreatePopupComponent } from './popups/createPopup/createPopup.component';
 import { UpdatePopupComponent } from './popups/updatePopup/updatePopup.component';
-import { DeletePopupComponent } from './popups/deletePopup/deletePopup.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
 export const MY_DATE_FORMATS = {
@@ -42,7 +41,6 @@ export const MY_DATE_FORMATS = {
     RegisterComponent,
     UpdatePopupComponent,
     CreatePopupComponent,
-    DeletePopupComponent,
   ],
   imports: [
     BrowserModule,

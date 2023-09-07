@@ -233,3 +233,8 @@
   cursor: pointer;
   width: 15px;
 }
+.warning-text {
+  font-size: 40px;
+  color: orange;
+  font-weight: 900;
+}

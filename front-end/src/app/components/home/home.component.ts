@@ -75,7 +75,7 @@ export class HomeComponent implements OnInit {
       .subscribe(
         (res: any) => {
           this.userId = res._id;
-          console.log(res, 'srinivas');
+          console.log('User:', res);
           this.message = `Hi ${res.name}`;
           Emitters.authEmitter.emit(true);
         },
@@ -115,11 +115,6 @@ export class HomeComponent implements OnInit {
     this.deleteTask = task;
     this.taskId = taskId;
     this.popupService.openUpdatePopup();
-  }
-
-  openPopup3(taskId: any) {
-    this.taskId = taskId;
-    this.popupService.openDeletePopup();
   }
 
   onItemDrop(event: CdkDragDrop<Task[]>): void {

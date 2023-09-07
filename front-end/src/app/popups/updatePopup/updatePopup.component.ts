@@ -22,7 +22,6 @@ export class UpdatePopupComponent implements OnInit {
 
   ngOnInit(): void {
     this.stageName = this.stage.stageName;
-    console.log(this.taskId, 'srinivas');
   }
 
   submit(): void {
@@ -42,7 +41,6 @@ export class UpdatePopupComponent implements OnInit {
           }
         );
     }
-    console.log(this.stage, 'srinvias');
   }
 
   deleteCurrentStage(): void {

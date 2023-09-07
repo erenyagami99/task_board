@@ -6,7 +6,6 @@ import { Injectable } from '@angular/core';
 export class PopupService {
   isCreatePopupOpen = false;
   isUpdatePopupOpen = false;
-  isDeletePopupOpen = false;
 
   openCreatePopup() {
     this.isCreatePopupOpen = true;
@@ -22,13 +21,5 @@ export class PopupService {
 
   closeUpdatePopup() {
     this.isUpdatePopupOpen = false;
-  }
-
-  openDeletePopup() {
-    this.isDeletePopupOpen = true;
-  }
-
-  closeDeletePopup() {
-    this.isDeletePopupOpen = false;
   }
 }
