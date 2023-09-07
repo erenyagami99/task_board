@@ -13,6 +13,7 @@
 }
 
 .popup-content {
+  position: relative;
   background-color: #fff; /* White background for the popup */
   padding: 20px;
   border-radius: 5px;
@@ -35,11 +36,11 @@
 }
 form {
   display: flex;
-  height: 400px;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   width: 400px;
+  min-height: 600px;
 }
 
 label {
@@ -49,9 +50,9 @@ label {
 
 input {
   padding: 10px;
-  margin-bottom: 15px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  width: 250px;
 }
 
 button {
@@ -68,12 +69,42 @@ button {
   justify-content: space-between;
   display: flex;
 }
-.header-div p {
-  cursor: pointer;
+.task-div {
+  width: 100%;
+  margin-left: -92px;
+  margin-top: 10px;
 }
-/* Responsive Styles */
-@media (max-width: 768px) {
-  .popup-content {
-    max-width: 90%;
-  }
+.application-div {
+  display: flex;
+  width: 100%;
+  gap: 20px;
+}
+.application {
+  color: white;
+  padding: 5px 8px;
+  background-color: #007bff;
+  border-radius: 4px;
+}
+.application span {
+  cursor: pointer;
+  padding-left: 8px;
+}
+.warning-message {
+  color: red;
+  margin: 0;
+}
+.task-group {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.task-container {
+  width: 100%;
+}
+.close-icon {
+  position: absolute;
+  margin: 0;
+  right: 40px;
+  cursor: pointer;
+  width: 25px;
 }

@@ -7,10 +7,12 @@ const {
 } = require("../controllers/userController");
 
 const {
-  createTask,
-  updateTask,
-  getTasksOfUser,
-  deleteTask,
+  createStage,
+  updateStage,
+  getStagesOfUser,
+  deleteStage,
+  updateTaskInStage,
+  deleteTaskInStage,
 } = require("../controllers/taskController");
 
 const router = Router();
@@ -21,10 +23,11 @@ router.post("/login", loginUser);
 
 router.get("/user", currentUser);
 
-router.post("/task", createTask);
-router.get("/task/:userId", getTasksOfUser);
-router.put("/task/:id", updateTask);
-
-router.delete("/task/:id", deleteTask);
+router.post("/task", createStage);
+router.get("/task/:userId", getStagesOfUser);
+router.put("/task/:id", updateStage);
+router.put("/task/:stageId/:taskId", updateTaskInStage);
+router.delete("/task/:id", deleteStage);
+router.delete("/task/:stageId/:taskId", deleteTaskInStage);
 
 module.exports = router;

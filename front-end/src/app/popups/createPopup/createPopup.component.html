@@ -1,67 +1,142 @@
 <!-- popup.component.html -->
 <div class="popup-container">
   <div class="popup-content">
-    <div class="header-div">
-      <h2>Create Task</h2>
-      <p (click)="closePopup()">X</p>
+    <div *ngIf="isObjectEmpty(stage)" class="header-div">
+      <h2>Create Stage With Task</h2>
     </div>
-    <form [formGroup]="form" (submit)="submit()">
-      <div class="input-div">
-        <label for="name">Name</label>
+    <img
+      (click)="closePopup()"
+      class="close-icon"
+      src="assets/images/close-icon.png"
+    />
+    <form
+      [formGroup]="form"
+      (ngSubmit)="isObjectEmpty(stage) ? submit() : submit2()"
+    >
+      <div *ngIf="isObjectEmpty(stage)" class="input-div">
+        <label for="stageName">Stage Name</label>
         <input
-          formControlName="name"
+          formControlName="stageName"
           type="text"
-          id="name"
-          name="name"
-          placeholder="Enter Name"
+          id="stageName"
+          name="stageName"
+          placeholder="Enter Stage Name"
           required
         />
       </div>
-      <div class="input-div">
-        <label for="description">Description</label>
-        <input
-          formControlName="description"
-          type="text"
-          id="description"
-          name="description"
-          placeholder="Enter Description"
-          required
-        />
+      <div class="task-div">
+        <h1>Enter Task Details</h1>
       </div>
-
-      <div class="input-div">
-        <label for="duedate">Due Date</label>
-        <mat-form-field>
-          <mat-label>Choose Due Date</mat-label>
-          <input
-            matInput
-            id="duedate"
-            formControlName="dueDate"
-            name="duedate"
-            [matDatepicker]="picker"
-            (dateChange)="onDateChange($event)"
-          />
-          <mat-datepicker-toggle
-            matIconSuffix
-            [for]="picker"
-          ></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-      </div>
-      <div class="input-div">
-        <label for="stage">stage</label>
-        <select
-          id="state"
-          formControlName="stage"
-          name="stage"
-          [(ngModel)]="selectedOption"
+      <div formArrayName="tasks" class="task-container">
+        <div
+          *ngFor="let taskGroup of taskControls; let i = index"
+          class="task-group"
+          [formGroupName]="i"
         >
-          <option value="to-do">To Do</option>
-          <option value="progress">Progress</option>
-          <option value="done">Completed</option>
-        </select>
-      </div>
+          <div class="input-div">
+            <label for="name">Task Name</label>
+            <input
+              formControlName="name"
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Enter Name"
+              required
+            />
+          </div>
+          <div class="input-div">
+            <label for="description">Description</label>
+            <input
+              formControlName="description"
+              type="text"
+              id="description"
+              name="description"
+              placeholder="Enter Description"
+              required
+            />
+          </div>
 
+          <div class="input-div">
+            <label for="duedate">Due Date</label>
+            <mat-form-field>
+              <mat-label>Choose Due Date</mat-label>
+              <input
+                matInput
+                id="duedate"
+                formControlName="dueDate"
+                name="duedate"
+                [matDatepicker]="picker"
+                (dateChange)="onDateChange($event)"
+              />
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="input-div">
+            <label for="application">Application</label>
+            <select
+              id="application"
+              formControlName="application"
+              name="application"
+              [(ngModel)]="selectedApplication"
+              (ngModelChange)="onApplicationChange()"
+            >
+              <option
+                *ngFor="let option of applicationOptions"
+                [value]="option"
+              >
+                {{ option }}
+              </option>
+            </select>
+          </div>
+          <div class="application-div">
+            <div *ngFor="let application of applications" class="application">
+              {{ application }}
+              <span (click)="removeApplication(application)">X</span>
+            </div>
+            <p *ngIf="applications.length === 0" class="warning-message">
+              Atleast one application should be selected
+            </p>
+          </div>
+          <div class="input-div">
+            <label for="links">Links</label>
+            <select
+              id="links"
+              formControlName="links"
+              name="links"
+              [(ngModel)]="selectedLinks"
+              (ngModelChange)="onLinkChange()"
+            >
+              <option *ngFor="let option of linkOptions" [value]="option">
+                {{ option }}
+              </option>
+            </select>
+          </div>
+          <div class="application-div">
+            <div *ngFor="let link of links" class="application">
+              {{ link }}
+              <span (click)="removeLink(link)">X</span>
+            </div>
+            <p *ngIf="links.length === 0" class="warning-message">
+              Atleast one link should be selected
+            </p>
+          </div>
+          <div class="input-div">
+            <label for="assignee">Assignee</label>
+            <input
+              formControlName="assignee"
+              type="text"
+              id="assignee"
+              name="assignee"
+              placeholder="Enter Assignee Name"
+              required
+            />
+          </div>
+        </div>
+      </div>
       <button type="submit">Create</button>
     </form>
   </div>

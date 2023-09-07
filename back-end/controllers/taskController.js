@@ -1,10 +1,10 @@
 const asyncHandler = require("express-async-handler");
-const Task = require("../model/task");
 const User = require("../model/user");
+const Stage = require("../model/task");
 
-const createTask = asyncHandler(async (req, res) => {
-  const { name, description, dueDate, stage, userId } = req.body;
-  if (!name || !description || !dueDate || !userId) {
+const createStage = asyncHandler(async (req, res) => {
+  const { stageName, tasks, userId } = req.body;
+  if (!stageName || !userId || !tasks) {
     res.status(400);
     throw new Error("Please Enter all the fields");
   }
@@ -14,40 +14,38 @@ const createTask = asyncHandler(async (req, res) => {
   }
 
   try {
-    const task = await Task.create({
-      name,
-      description,
-      dueDate,
-      stage,
+    const stage = await Stage.create({
+      stageName,
       userId,
+      tasks,
     });
-    res.status(200).json(task);
-    console.log(task, "task");
+    res.status(200).json(stage);
+    console.log(stage, "stage");
   } catch (error) {
     res.status(400).json({ message: error.message });
     if (error.message.includes("E11000")) {
-      throw new Error("Task Name Already Exists");
+      throw new Error("Stage Name Already Exists");
     }
   }
 });
 
-const getTasksOfUser = asyncHandler(async (req, res) => {
+const getStagesOfUser = asyncHandler(async (req, res) => {
   try {
     const userId = req.params.userId;
-    const tasks = await Task.find({ userId: userId });
-    res.json(tasks);
+    const stages = await Stage.find({ userId: userId });
+    res.json(stages);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 });
 
-const updateTask = asyncHandler(async (req, res) => {
+const updateStage = asyncHandler(async (req, res) => {
   try {
     const id = req.params.id;
     const updatedData = req.body;
     const options = { new: true };
 
-    const result = await Task.findByIdAndUpdate(id, updatedData, options);
+    const result = await Stage.findByIdAndUpdate(id, updatedData, options);
 
     res.send(result);
   } catch (error) {
@@ -55,15 +53,74 @@ const updateTask = asyncHandler(async (req, res) => {
   }
 });
 
-const deleteTask = asyncHandler(async (req, res) => {
+const updateTaskInStage = async (req, res) => {
+  const { stageId, taskId } = req.params;
+  const updatedTaskData = req.body;
+
+  try {
+    const stage = await Stage.findById(stageId);
+
+    if (!stage) {
+      return res.status(404).json({ message: "Stage not found" });
+    }
+
+    const taskToUpdate = stage.tasks.find(
+      (task) => task._id.toString() === taskId
+    );
+
+    if (!taskToUpdate) {
+      return res.status(404).json({ message: "Task not found in the stage" });
+    }
+    Object.assign(taskToUpdate, updatedTaskData);
+    await stage.save();
+
+    res.status(200).json(taskToUpdate);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const deleteStage = asyncHandler(async (req, res) => {
   try {
     const id = req.params.id;
-    const data = await Task.findByIdAndDelete(id);
+    const data = await Stage.findByIdAndDelete(id);
     console.log(data, "data");
-    res.send(`Task with name: ${data.name} has been deleted..`);
+    res.send(`Stage with name: ${data.name} has been deleted..`);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 });
 
-module.exports = { createTask, getTasksOfUser, updateTask, deleteTask };
+const deleteTaskInStage = async (req, res) => {
+  const { stageId, taskId } = req.params;
+
+  try {
+    const stage = await Stage.findById(stageId);
+
+    if (!stage) {
+      return res.status(404).json({ message: "Stage not found" });
+    }
+
+    const taskIndex = stage.tasks.findIndex((task) => task._id == taskId);
+
+    if (taskIndex === -1) {
+      return res.status(404).json({ message: "Task not found in the stage" });
+    }
+
+    stage.tasks.splice(taskIndex, 1);
+    await stage.save();
+
+    res.status(200).json({ message: "Task deleted from the stage" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = {
+  createStage,
+  getStagesOfUser,
+  updateStage,
+  deleteStage,
+  updateTaskInStage,
+  deleteTaskInStage,
+};

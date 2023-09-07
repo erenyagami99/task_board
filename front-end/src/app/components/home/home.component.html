@@ -4,11 +4,11 @@
       {{ message }}
     </h1>
     <button type="button" class="btn btn-primary btn-lg" (click)="openPopup1()">
-      Create Task +
+      Create Stage +
     </button>
   </div>
 
-  <div class="table">
+  <!-- <div class="table">
     <div class="table-head">
       <div class="heading"><h1>To Do</h1></div>
       <div class="heading"><h1>In Progress</h1></div>
@@ -115,15 +115,79 @@
         </div>
       </div>
     </div>
+  </div> -->
+
+  <div class="stage-container">
+    <div class="stage-div" *ngFor="let stage of stages; let i = index">
+      <div
+        [style.background-color]="backgroundColors[i % backgroundColors.length]"
+        class="stage-header"
+      >
+        <h1>{{ stage.stageName }}</h1>
+        <div class="icon-container">
+          <img
+            (click)="openPopup2(stage)"
+            src="/assets/images/white-edit.png"
+          />
+          <img src="/assets/images/white-delete.png" />
+        </div>
+      </div>
+      <div class="task-container">
+        <div *ngFor="let task of stage.tasks" class="task-div">
+          <div class="app-container">
+            <div
+              *ngFor="let application of task.application"
+              class="app-div"
+              [style.background-color]="getAppColor(application)"
+            >
+              {{ application }}
+            </div>
+          </div>
+          <div class="details-div">
+            <div class="text-div">
+              <h1>{{ task.name }}</h1>
+              <p>{{ task.description }}</p>
+            </div>
+            <p>{{ task.dueDate | date : "MMM dd" }}</p>
+          </div>
+          <div *ngIf="task.links.includes('project')" class="link-div">
+            <img src="assets/images/project.png" />
+            <p>Project Link &#8594;</p>
+          </div>
+          <div *ngIf="task.links.includes('document')" class="link-div">
+            <img src="assets/images/document.png" />
+            <p>Document Link &#8594;</p>
+          </div>
+          <div *ngIf="task.links.includes('design')" class="link-div">
+            <img src="assets/images/figma.png" />
+            <p>Link to design &#8594;</p>
+          </div>
+          <div class="assignee-div">
+            <div>
+              <img src="assets/images/assignee.png" />
+              <p>{{ task.assignee }}</p>
+            </div>
+            <div>
+              <img src="assets/images/update-icon.png" />
+              <img src="assets/images/delete-icon.png" />
+            </div>
+          </div>
+        </div>
+        <div class="add-div" (click)="openPopup1(stage)">
+          <img src="assets/images/add-icon.png" />
+        </div>
+      </div>
+    </div>
   </div>
 
   <create-popup
     [userId]="userId"
+    [stage]="stage"
     *ngIf="popupService.isCreatePopupOpen"
   ></create-popup>
   <update-popup
     [userId]="userId"
-    [taskToUpdate]="taskToUpdate"
+    [stage]="stage"
     *ngIf="popupService.isUpdatePopupOpen"
   ></update-popup>
 

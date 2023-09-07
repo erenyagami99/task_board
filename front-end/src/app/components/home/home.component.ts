@@ -30,11 +30,10 @@ export class HomeComponent implements OnInit {
   selectedDate: any;
   userId: any;
   tasks: Task[] = [];
-  todoTasks: Task[] = [];
-  progressTasks: Task[] = [];
-  completedTasks: Task[] = [];
-  taskToUpdate: any = {};
   taskId: any;
+  stage: any;
+  stages: any;
+  backgroundColors = ['#1C5A7C', '#106354', '#54117D', '#71441B'];
 
   constructor(
     private http: HttpClient,
@@ -90,18 +89,7 @@ export class HomeComponent implements OnInit {
 
     this.http.get(apiUrl).subscribe(
       (response: any) => {
-        this.tasks = response;
-
-        for (let i = 0; i < this.tasks.length; i++) {
-          if (this.tasks[i].stage === 'to-do') {
-            console.log(this.tasks[i]);
-            this.todoTasks.push(this.tasks[i]);
-          } else if (this.tasks[i].stage === 'progress') {
-            this.progressTasks.push(this.tasks[i]);
-          } else if (this.tasks[i].stage === 'done') {
-            this.completedTasks.push(this.tasks[i]);
-          }
-        }
+        this.stages = response;
         console.log('Tasks:', response);
       },
       (error) => {
@@ -110,12 +98,13 @@ export class HomeComponent implements OnInit {
     );
   }
 
-  openPopup1() {
+  openPopup1(stage: any = {}) {
+    this.stage = stage;
     this.popupService.openCreatePopup();
   }
 
-  openPopup2(task: any) {
-    this.taskToUpdate = { ...task };
+  openPopup2(stage: any) {
+    this.stage = stage;
     this.popupService.openUpdatePopup();
   }
 
@@ -170,5 +159,19 @@ export class HomeComponent implements OnInit {
         console.error('Error:', error);
       }
     );
+  }
+
+  getRandomColorIndex() {
+    return Math.floor(Math.random() * this.backgroundColors.length);
+  }
+  getAppColor(applicationName: string): string {
+    if (applicationName === 'IOS') {
+      return '#000000';
+    } else if (applicationName === 'Desktop') {
+      return '#CB9647';
+    } else if (applicationName === 'Mobile') {
+      return '#17A14E';
+    }
+    return '#4765B0';
   }
 }
