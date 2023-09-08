@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Emitters } from 'src/app/emitters/emitter';
 import { Store } from '@ngrx/store';
 import { selectJwt } from '../../auth/selectors/auth.selectors';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, concatMap } from 'rxjs/operators';
 import { PopupService } from 'src/app/popup.service';
 import {
   CdkDragDrop,
@@ -15,11 +15,11 @@ interface Task {
   name: string;
   description: string;
   dueDate: Date;
-  stage: string;
-  userId: string;
+  application: string[];
+  links: string[];
+  assignee: string;
   _id: string;
 }
-
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -37,6 +37,8 @@ export class HomeComponent implements OnInit {
   deleteTask: any;
   isTask: any;
   stageId: any;
+  stageNames: any = [];
+  selectedTaskData: any;
   backgroundColors = ['#1C5A7C', '#106354', '#54117D', '#71441B'];
 
   constructor(
@@ -48,7 +50,7 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.store
       .select(selectJwt)
-      .pipe(debounceTime(10))
+      .pipe(debounceTime(5))
       .subscribe((jwt) => {
         if (jwt) {
           this.getUser(jwt);
@@ -59,7 +61,7 @@ export class HomeComponent implements OnInit {
 
     setTimeout(() => {
       this.getUserTasks(this.userId);
-    }, 1000);
+    }, 2000);
   }
 
   getUser(jwt: string): void {
@@ -71,7 +73,6 @@ export class HomeComponent implements OnInit {
         headers: headers,
         withCredentials: true,
       })
-
       .subscribe(
         (res: any) => {
           this.userId = res._id;
@@ -94,7 +95,10 @@ export class HomeComponent implements OnInit {
     this.http.get(apiUrl).subscribe(
       (response: any) => {
         this.stages = response;
-        console.log('Stages:', response);
+        for (let i = 0; i < this.stages.length; i++) {
+          this.stageNames.push(this.stages[i].stageName);
+        }
+        console.log('Stages:', this.stages);
       },
       (error) => {
         console.error('Error:', error);
@@ -118,7 +122,24 @@ export class HomeComponent implements OnInit {
   }
 
   onItemDrop(event: CdkDragDrop<Task[]>): void {
-    const lastMovedTask: Task = event.item.data;
+    if (!Array.isArray(event.previousContainer.data)) {
+      event.previousContainer.data = [];
+    }
+
+    if (!Array.isArray(event.container.data)) {
+      event.container.data = [];
+    }
+
+    const movedItemData = this.selectedTaskData;
+    const previousStageName = event.previousContainer.id;
+    const currentStageName = event.container.id;
+
+    const previousStage = this.stages.find(
+      (stage: any) => stage.stageName === previousStageName
+    );
+    const currentStage = this.stages.find(
+      (stage: any) => stage.stageName === currentStageName
+    );
     if (event.previousContainer === event.container) {
       moveItemInArray(
         event.container.data,
@@ -133,36 +154,33 @@ export class HomeComponent implements OnInit {
         event.currentIndex
       );
 
-      const currentStage = event.container.id;
-
-      this.taskStageUpdate(lastMovedTask, currentStage);
+      this.taskStageUpdate(movedItemData, currentStage, previousStage._id);
     }
   }
-  taskStageUpdate(updatedTask: any, stage: any) {
-    let taskStage = '';
-    if (stage === 'cdk-drop-list-0') {
-      taskStage = 'to-do';
-    } else if (stage === 'cdk-drop-list-1') {
-      taskStage = 'progress';
-    } else {
-      taskStage = 'done';
-    }
-    let toUpdateTask = {
-      name: updatedTask.name,
-      description: updatedTask.description,
-      dueDate: updatedTask.dueDate,
-      stage: taskStage,
-      userId: updatedTask.userId,
-    };
-    const url = `https://task-board-ddz4.onrender.com/task/${updatedTask._id}`;
-    return this.http.put(url, toUpdateTask).subscribe(
-      (response) => {
-        console.log('Task created:', response);
-      },
-      (error) => {
-        console.error('Error:', error);
-      }
-    );
+  taskStageUpdate(task: any, stage: any, previousStageId: any) {
+    let updateStage = stage;
+    updateStage.tasks.push(task);
+    this.http
+      .delete(
+        `https://task-board-ddz4.onrender.com/task/${previousStageId}/${task._id}`
+      )
+      .pipe(
+        concatMap(() =>
+          this.http.put(
+            `https://task-board-ddz4.onrender.com/task/${stage._id}`,
+            updateStage
+          )
+        )
+      )
+      .subscribe(
+        () => {
+          console.log('Task updated successfully.');
+          this.getUserTasks(this.userId);
+        },
+        (error) => {
+          console.error('Error updating task:', error);
+        }
+      );
   }
 
   getRandomColorIndex() {

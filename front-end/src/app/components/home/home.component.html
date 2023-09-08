@@ -36,49 +36,62 @@
         </div>
       </div>
       <div class="task-container">
-        <div *ngFor="let task of stage.tasks" class="task-div">
-          <div class="app-container">
-            <div
-              *ngFor="let application of task.application"
-              class="app-div"
-              [style.background-color]="getAppColor(application)"
-            >
-              {{ application }}
+        <div
+          cdkDropList
+          [cdkDropListData]="stage.stageName"
+          [cdkDropListConnectedTo]="stageNames"
+          (cdkDropListDropped)="onItemDrop($event)"
+          [id]="stage.stageName"
+        >
+          <div
+            *ngFor="let task of stage.tasks"
+            class="task-div"
+            cdkDrag
+            (cdkDragStarted)="selectedTaskData = task"
+          >
+            <div class="app-container">
+              <div
+                *ngFor="let application of task.application"
+                class="app-div"
+                [style.background-color]="getAppColor(application)"
+              >
+                {{ application }}
+              </div>
             </div>
-          </div>
-          <div class="details-div">
-            <div class="text-div">
-              <h1>{{ task.name }}</h1>
-              <p>{{ task.description }}</p>
+            <div class="details-div">
+              <div class="text-div">
+                <h1>{{ task.name }}</h1>
+                <p>{{ task.description }}</p>
+              </div>
+              <p>{{ task.dueDate | date : "MMM dd" }}</p>
             </div>
-            <p>{{ task.dueDate | date : "MMM dd" }}</p>
-          </div>
-          <div *ngIf="task.links.includes('project')" class="link-div">
-            <img src="assets/images/project.png" />
-            <p>Project Link &#8594;</p>
-          </div>
-          <div *ngIf="task.links.includes('document')" class="link-div">
-            <img src="assets/images/document.png" />
-            <p>Document Link &#8594;</p>
-          </div>
-          <div *ngIf="task.links.includes('design')" class="link-div">
-            <img src="assets/images/figma.png" />
-            <p>Link to design &#8594;</p>
-          </div>
-          <div class="assignee-div">
-            <div>
-              <img src="assets/images/assignee.png" />
-              <p>{{ task.assignee }}</p>
+            <div *ngIf="task.links.includes('project')" class="link-div">
+              <img src="assets/images/project.png" />
+              <p>Project Link &#8594;</p>
             </div>
-            <div>
-              <img
-                (click)="openPopup1(task, true, stage._id)"
-                src="assets/images/update-icon.png"
-              />
-              <img
-                (click)="openPopup2(stage, false, true, task._id)"
-                src="assets/images/delete-icon.png"
-              />
+            <div *ngIf="task.links.includes('document')" class="link-div">
+              <img src="assets/images/document.png" />
+              <p>Document Link &#8594;</p>
+            </div>
+            <div *ngIf="task.links.includes('design')" class="link-div">
+              <img src="assets/images/figma.png" />
+              <p>Link to design &#8594;</p>
+            </div>
+            <div class="assignee-div">
+              <div>
+                <img src="assets/images/assignee.png" />
+                <p>{{ task.assignee }}</p>
+              </div>
+              <div>
+                <img
+                  (click)="openPopup1(task, true, stage._id)"
+                  src="assets/images/update-icon.png"
+                />
+                <img
+                  (click)="openPopup2(stage, false, true, task._id)"
+                  src="assets/images/delete-icon.png"
+                />
+              </div>
             </div>
           </div>
         </div>
