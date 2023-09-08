@@ -30,7 +30,6 @@ const stageSchema = new mongoose.Schema({
   stageName: {
     type: String,
     required: true,
-    unique: true,
   },
   tasks: {
     type: [taskSchema],
